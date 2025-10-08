@@ -15,14 +15,30 @@ hs_err_pid*
 
 # CRM System data files
 customers.dat
+data/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
 # IDE specific files
 .vscode/
 .idea/
 *.iml
+*.iws
+*.ipr
 .settings/
 .project
 .classpath
+.factorypath
 
 # OS specific files
 .DS_Store
@@ -31,9 +47,15 @@ Desktop.ini
 
 # Log files
 *.log
+logs/
 
 # Temporary files
 *.tmp
 *.temp
 *~
 
+# Spring Boot
+application-*.properties
+application-*.yml
+!application.properties
+!application.yml

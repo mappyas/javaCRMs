@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計情報 - CRM システム</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 CRM 顧客管理システム</h1>
+            <nav>
+                <a th:href="@{/customers}">顧客一覧</a>
+                <a th:href="@{/customers/statistics}" class="active">統計情報</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="breadcrumb">
+                <a th:href="@{/customers}">顧客一覧</a> &gt; <span>統計情報</span>
+            </div>
+
+            <div class="stats-container">
+                <h2>📊 統計情報</h2>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-label">総顧客数</div>
+                        <div class="stat-value" th:text="${totalCount}">0</div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3>会社別顧客数（上位10社）</h3>
+                    <div class="company-stats">
+                        <table class="stats-table" th:if="${!companyStats.isEmpty()}">
+                            <thead>
+                                <tr>
+                                    <th>順位</th>
+                                    <th>会社名</th>
+                                    <th>顧客数</th>
+                                    <th>割合</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="stat, iterStat : ${companyStats}" th:if="${iterStat.index < 10}">
+                                    <td th:text="${iterStat.index + 1}">1</td>
+                                    <td th:text="${stat[0] ?: '(未設定)'}">サンプル株式会社</td>
+                                    <td th:text="${stat[1]}">10</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" th:style="'width:' + ${stat[1] * 100.0 / totalCount} + '%'"></div>
+                                            <span class="progress-text" th:text="${#numbers.formatDecimal(stat[1] * 100.0 / totalCount, 1, 1)} + '%'">50%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div th:if="${companyStats.isEmpty()}" class="no-data">
+                            <p>統計データがありません</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-footer">
+                    <a th:href="@{/customers}" class="btn btn-secondary">← 一覧に戻る</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 CRM System v1.0</p>
+        </footer>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顧客一覧 - CRM システム</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 CRM 顧客管理システム</h1>
+            <nav>
+                <a th:href="@{/customers}" class="active">顧客一覧</a>
+                <a th:href="@{/customers/statistics}">統計情報</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <!-- メッセージ表示 -->
+            <div th:if="${successMessage}" class="alert alert-success">
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-error">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- 検索フォーム -->
+            <div class="search-section">
+                <form th:action="@{/customers/search}" method="get" class="search-form">
+                    <input type="text" name="keyword" th:value="${keyword}" placeholder="検索キーワードを入力..." class="search-input">
+                    <select name="searchType" class="search-select">
+                        <option value="all" th:selected="${searchType == 'all' || searchType == null}">全項目</option>
+                        <option value="name" th:selected="${searchType == 'name'}">名前</option>
+                        <option value="company" th:selected="${searchType == 'company'}">会社名</option>
+                        <option value="email" th:selected="${searchType == 'email'}">メール</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">🔍 検索</button>
+                </form>
+                <a th:href="@{/customers/new}" class="btn btn-success">➕ 新規登録</a>
+            </div>
+
+            <!-- 顧客数表示 -->
+            <div class="summary">
+                <p>総顧客数: <strong th:text="${totalCount}">0</strong>人</p>
+            </div>
+
+            <!-- 顧客一覧テーブル -->
+            <div class="table-container">
+                <table class="customer-table" th:if="${!customers.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>名前</th>
+                            <th>会社名</th>
+                            <th>メールアドレス</th>
+                            <th>電話番号</th>
+                            <th>登録日</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="customer : ${customers}">
+                            <td th:text="${customer.id}">1</td>
+                            <td>
+                                <a th:href="@{/customers/{id}(id=${customer.id})}" th:text="${customer.name}" class="customer-link">山田太郎</a>
+                            </td>
+                            <td th:text="${customer.company}">サンプル株式会社</td>
+                            <td th:text="${customer.email}">example@example.com</td>
+                            <td th:text="${customer.phone}">090-1234-5678</td>
+                            <td th:text="${#temporals.format(customer.registeredDate, 'yyyy/MM/dd')}">2024/01/01</td>
+                            <td class="action-buttons">
+                                <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-info">詳細</a>
+                                <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-sm btn-warning">編集</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div th:if="${customers.isEmpty()}" class="no-data">
+                    <p>📭 登録されている顧客がいません。</p>
+                    <a th:href="@{/customers/new}" class="btn btn-success">最初の顧客を登録する</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 CRM System v1.0</p>
+        </footer>
+    </div>
+</body>
+</html>
+

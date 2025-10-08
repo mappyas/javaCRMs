@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顧客詳細 - CRM システム</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 CRM 顧客管理システム</h1>
+            <nav>
+                <a th:href="@{/customers}">顧客一覧</a>
+                <a th:href="@{/customers/statistics}">統計情報</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="breadcrumb">
+                <a th:href="@{/customers}">顧客一覧</a> &gt; <span>顧客詳細</span>
+            </div>
+
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h2 th:text="${customer.name}">山田太郎</h2>
+                    <div class="detail-actions">
+                        <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-warning">✏️ 編集</a>
+                        <form th:action="@{/customers/{id}/delete(id=${customer.id})}" method="post" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
+                            <button type="submit" class="btn btn-danger">🗑️ 削除</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="detail-body">
+                    <div class="detail-row">
+                        <label>顧客ID</label>
+                        <span th:text="${customer.id}">1</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>名前</label>
+                        <span th:text="${customer.name}">山田太郎</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>メールアドレス</label>
+                        <span>
+                            <a th:href="'mailto:' + ${customer.email}" th:text="${customer.email}">example@example.com</a>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <label>電話番号</label>
+                        <span th:text="${customer.phone ?: '-'}">090-1234-5678</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>会社名</label>
+                        <span th:text="${customer.company ?: '-'}">サンプル株式会社</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>住所</label>
+                        <span th:text="${customer.address ?: '-'}">東京都渋谷区1-2-3</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>登録日時</label>
+                        <span th:text="${#temporals.format(customer.registeredDate, 'yyyy年MM月dd日 HH:mm')}">2024年01月01日 10:00</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>最終連絡日時</label>
+                        <span th:text="${#temporals.format(customer.lastContactDate, 'yyyy年MM月dd日 HH:mm')}">2024年01月01日 10:00</span>
+                    </div>
+                    <div class="detail-row notes-row">
+                        <label>メモ</label>
+                        <span th:text="${customer.notes ?: '-'}" class="notes-content">メモがありません</span>
+                    </div>
+                </div>
+
+                <div class="detail-footer">
+                    <a th:href="@{/customers}" class="btn btn-secondary">← 一覧に戻る</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 CRM System v1.0</p>
+        </footer>
+    </div>
+</body>
+</html>
+
